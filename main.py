@@ -17,11 +17,11 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # initialization
 episode = 0
-training_episode = 1000*100
+training_episode = 1000*300
 logging_episode = 1000*10
 data = DataPreProcessing('TSM')
 env = Environment(data)
-agent = DQN(device, training_episode)
+agent = DQN(device)
 writer = SummaryWriter(log_dir=f"log/DQN_{datetime.date.today()}_{time.time()}")\
     if training_episode > logging_episode else None
 

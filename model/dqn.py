@@ -8,46 +8,44 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 class FNN(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size, device) -> None:
+    def __init__(self, input_size, hidden_size, output_size) -> None:
         super(FNN,self).__init__()
-        self.device = device
         self.l1 = nn.Linear(input_size, hidden_size)
         self.l2 = nn.Linear(hidden_size, hidden_size)
         self.l3 = nn.Linear(hidden_size, output_size)
         # weight initialization
         self.apply(self._init_weights)
 
-    def _init_weights(self, module):
+    def _init_weights(self, module) -> None:
         if isinstance(module, nn.Linear):
             nn.init.xavier_normal_(module.weight)
             nn.init.constant_(module.bias, 0.0)
 
     def forward(self, x) -> torch.Tensor:
-        #x.to(self.device)
         x = F.relu(self.l1(x))
         x = F.relu(self.l2(x))
         y = self.l3(x)
         return y
 
 class DQN:
-    def __init__(self, device, training_episode) -> None:
+    def __init__(self, device) -> None:
         # training hyperparameter
         self.batch_size = 32
         self.learning_rate = 1e-3
         self.update_value_network_frequency = 5
         # RL hyperparameter
-        self.memory_capacity = 1000*1000 # 1000 episodes
+        self.memory_capacity = 1000*1000*100 # 1000 episodes
         self.discount_rate = 0.9
         self.max_epsilon = 1
         self.min_epsilon = 0.1
-        self.update_epsilon_episode = training_episode*0.75
+        self.exploration_episode = 1000*100
         # attribute
         self.action_dim = 3
         self.epsilon = self.max_epsilon
-        self.epsilon_decay_amount = (self.max_epsilon - self.min_epsilon) / self.update_epsilon_episode
+        self.epsilon_decay_amount = (self.max_epsilon - self.min_epsilon) / self.exploration_episode
         # object
         self.device = device
-        self.value_network = FNN(5, 16, 3, device).to(device)
+        self.value_network = FNN(5, 16, 3).to(device)
         self.memory_buffer = [] # state, action, reward, next_state, done
         # optimization
         self.loss = 0

@@ -1,6 +1,6 @@
 # import packages
 # pip install pandas
-# pip install pandas_reader
+# pip install pandas-datareader
 # pip install matplotlib
 import numpy as np
 import pandas as pd      
@@ -8,7 +8,7 @@ import pandas_datareader as datareader
 import matplotlib.pyplot as plt
 
 # data pre-processing
-def DataPreProcessing(stock_name) -> np.array:
+def DataPreProcessing(stock_name) -> np.ndarray:
     data = datareader.DataReader(stock_name, data_source='yahoo')
     data = data.drop(['Adj Close'], axis=1)
     arr = data.to_numpy(dtype='float32')
@@ -42,11 +42,18 @@ class Environment:
         state = np.array([max_high, min_low, avg_open, avg_close, avg_vol])
         return state
 
+    """
     def Reward(self) -> float:
         net = max(0, self.capital - self.last_capital)
         self.last_capital = self.capital
         return net
 
+    """
+    def Reward(self, done) -> float:
+        reward = self.capital - self.initial_capital if done\
+            else 0
+        return reward
+    
     def Buy(self) -> None:
         buying_price = self.data[self.current_date][2]
         if self.capital > buying_price:
@@ -71,9 +78,9 @@ class Environment:
             self.Buy()
         elif action == 2:
             self.Sell()
-        reward = self.Reward()
         self.current_date = min(self.current_date + self.timestep, self.terminal_date)
         done = True if self.current_date >= self.terminal_date else False
+        reward = self.Reward(done)
         new_state = self.Observation()
         return new_state, reward, done
 
