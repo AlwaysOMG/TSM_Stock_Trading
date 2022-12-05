@@ -30,7 +30,7 @@ class FNN(nn.Module):
 class DQN:
     def __init__(self, device) -> None:
         # training hyperparameter
-        self.batch_size = 32
+        self.batch_size = 16
         self.learning_rate = 1e-3
         self.update_value_network_frequency = 5
         # RL hyperparameter
@@ -45,7 +45,7 @@ class DQN:
         self.epsilon_decay_amount = (self.max_epsilon - self.min_epsilon) / self.exploration_episode
         # object
         self.device = device
-        self.value_network = FNN(5, 16, 3).to(device)
+        self.value_network = FNN(6, 16, 3).to(device)
         self.memory_buffer = [] # state, action, reward, next_state, done
         # optimization
         self.loss = 0

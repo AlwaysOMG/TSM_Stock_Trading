@@ -39,7 +39,8 @@ class Environment:
         avg_open = np.average(windowed_data[:, 2], weights=weight)
         avg_close = np.average(windowed_data[:, 3], weights=weight)
         avg_vol = np.average(windowed_data[:, 4], weights=weight)
-        state = np.array([max_high, min_low, avg_open, avg_close, avg_vol])
+        capital = self.capital
+        state = np.array([max_high, min_low, avg_open, avg_close, avg_vol, capital])
         return state
 
     """

@@ -25,6 +25,7 @@ agent = DQN(device)
 writer = SummaryWriter(log_dir=f"log/DQN_{datetime.date.today()}_{time.time()}")\
     if training_episode > logging_episode else None
 
+# training
 while True:
     episode_terminal = False
     current_state = env.Reset()
