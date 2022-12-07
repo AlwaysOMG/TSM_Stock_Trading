@@ -20,9 +20,9 @@ class Environment:
         self.data = data
         # time
         self.terminal_date = self.data.shape[0]
-        self.current_date = 0
-        self.window_size = 7
-        self.timestep = 7
+        self.current_date = 5
+        self.window_size = 5
+        self.timestep = 5
         # stock
         self.initial_capital = 10000
         self.capital = 0
@@ -31,7 +31,7 @@ class Environment:
 
     def Observation(self) -> np.ndarray:
         starting_id = self.current_date - self.window_size
-        weight = np.arange(1, 8)
+        weight = np.arange(1, self.window_size+1)
         windowed_data = self.data[starting_id:self.current_date, :] if starting_id >= 0 \
             else self.data[:self.window_size, :]
         max_high = np.max(windowed_data[:, 0])
@@ -68,7 +68,6 @@ class Environment:
             self.inventory.pop()
             
     def Reset(self) -> np.ndarray:
-        self.current_date = 10
         self.capital = self.initial_capital
         self.last_capital = self.capital
         state = self.Observation()
