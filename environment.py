@@ -20,7 +20,7 @@ class Environment:
         self.data = data
         # time
         self.terminal_date = self.data.shape[0]
-        self.current_date = 5
+        self.current_date = 0
         self.window_size = 5
         self.timestep = 5
         # stock
@@ -68,6 +68,7 @@ class Environment:
             self.inventory.pop()
             
     def Reset(self) -> np.ndarray:
+        self.current_date = 5
         self.capital = self.initial_capital
         self.last_capital = self.capital
         state = self.Observation()
