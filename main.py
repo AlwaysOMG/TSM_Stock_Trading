@@ -10,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 # import modules
 from environment import DataPreProcessing
 from environment import Environment
-from model.dqn import DQN
+from model.dqn2013 import DQN
 
 # setting
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -29,22 +29,25 @@ writer = SummaryWriter(log_dir=f"log/DQN_{datetime.date.today()}_{time.time()}")
 while True:
     episode_terminal = False
     current_state = env.Reset()
+    step = 0
 
     while not episode_terminal:
         # interact with environment
         action = agent.SelectAction(current_state)
         new_state, reward, done = env.Step(action)
         episode_terminal = done
-        # memory
+        # memory replay
         memory = [current_state, action, reward, new_state, done]
         agent.Memory(memory)
         # state transition
         current_state = new_state
+        step += 1
+        # update parameter
+        if step % agent.update_value_network_frequency == 0\
+            and len(agent.memory_buffer) > agent.batch_size:
+            agent.UpdateValueNetwork()
 
-    # update parameter
-    if episode % agent.update_value_network_frequency == 0\
-        and len(agent.memory_buffer) > agent.batch_size:
-        agent.UpdateValueNetwork()
+    # epsilon greedy policy
     agent.EpsilonDecay()
 
     # tensorboard logging
