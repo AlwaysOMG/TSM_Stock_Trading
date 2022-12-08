@@ -34,7 +34,7 @@ class DQN:
         self.learning_rate = 1e-3
         self.update_value_network_frequency = 5
         # RL hyperparameter
-        self.memory_capacity = 300*1000*50 # 1000*50 episodes
+        self.memory_capacity = 250*1000*10 # 1000*10 episodes
         self.discount_rate = 0.9
         self.max_epsilon = 1
         self.min_epsilon = 0.1
@@ -103,5 +103,4 @@ class DQN:
     def Memory(self, memory) -> None:
         if len(self.memory_buffer) == self.memory_capacity:
             self.memory_buffer.pop(0)
-            print('drop')
         self.memory_buffer.append(memory)    

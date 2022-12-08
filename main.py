@@ -17,7 +17,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # initialization
 episode = 0
-training_episode = 1000*300
+training_episode = 1000*100
 logging_episode = 1000*10
 data = DataPreProcessing('TSM')
 env = Environment(data)
