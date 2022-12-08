@@ -10,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 # import modules
 from environment import DataPreProcessing
 from environment import Environment
-from model.dqn2013 import DQN
+from model.dqlearning import DQLearning
 
 # setting
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -21,7 +21,7 @@ training_episode = 1000*100
 logging_episode = 1000*10
 data = DataPreProcessing('TSM')
 env = Environment(data)
-agent = DQN(device)
+agent = DQLearning(device)
 writer = SummaryWriter(log_dir=f"log/DQN_{datetime.date.today()}_{time.time()}")\
     if training_episode > logging_episode else None
 

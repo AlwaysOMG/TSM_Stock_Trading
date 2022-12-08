@@ -27,12 +27,12 @@ class FNN(nn.Module):
         y = self.l3(x)
         return y
 
-class DQN:
+class DQLearning:
     def __init__(self, device) -> None:
         # training hyperparameter
         self.batch_size = 16
         self.learning_rate = 1e-3
-        self.update_value_network_frequency = 5
+        self.update_value_network_frequency = 10
         # RL hyperparameter
         self.memory_capacity = 250*1000*10 # 1000*10 episodes
         self.discount_rate = 0.9
