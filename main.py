@@ -22,7 +22,7 @@ logging_episode = 1000*10
 data = DataPreProcessing('TSM')
 env = Environment(data)
 agent = DQLearning(device)
-writer = SummaryWriter(log_dir=f"log/DQN_{datetime.date.today()}_{time.time()}")\
+writer = SummaryWriter(log_dir=f"log/{agent.name}/{datetime.date.today()}_{time.time()}")\
     if training_episode > logging_episode else None
 
 # training

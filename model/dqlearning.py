@@ -40,6 +40,7 @@ class DQLearning:
         self.min_epsilon = 0.1
         self.exploration_episode = 1000*100
         # attribute
+        self.name = "DQLearning"
         self.action_dim = 3
         self.epsilon = self.max_epsilon
         self.epsilon_decay_amount = (self.max_epsilon - self.min_epsilon) / self.exploration_episode
