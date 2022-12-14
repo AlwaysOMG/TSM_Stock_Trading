@@ -11,6 +11,7 @@ from torch.utils.tensorboard import SummaryWriter
 from environment import DataPreProcessing
 from environment import Environment
 from model.dqlearning import DQLearning
+from model.dqn import DQN
 
 # setting
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -21,7 +22,8 @@ training_episode = 1000*100
 logging_episode = 1000*10
 data = DataPreProcessing('TSM')
 env = Environment(data)
-agent = DQLearning(device)
+#agent = DQLearning(device)
+agent = DQN(device)
 writer = SummaryWriter(log_dir=f"log/{agent.name}_{datetime.date.today()}_{time.time()}")\
     if training_episode > logging_episode else None
 
@@ -42,10 +44,13 @@ while True:
         # state transition
         current_state = new_state
         step += 1
-        # update parameter
+        # update value network
         if step % agent.update_value_network_frequency == 0\
             and len(agent.memory_buffer) > agent.batch_size:
             agent.UpdateValueNetwork()
+        # update target network
+        if step % agent.update_target_network_frequency == 0:
+            agent.UpdateTargetNetwork()
 
     # epsilon greedy policy
     agent.EpsilonDecay()
