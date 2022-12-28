@@ -8,8 +8,8 @@ import torch
 from torch.utils.tensorboard import SummaryWriter 
 
 # import modules
-from environment import DataPreProcessing
-from environment import Environment
+from rl_env.environment import DataPreProcessing
+from rl_env.environment import Environment
 from model.dqlearning import DQLearning
 from model.dqn import DQN
 
@@ -18,7 +18,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # initialization
 episode = 0
-training_episode = 1000*100
+training_episode = 1000*300
 logging_episode = 1000*10
 data = DataPreProcessing('TSM')
 env = Environment(data)
