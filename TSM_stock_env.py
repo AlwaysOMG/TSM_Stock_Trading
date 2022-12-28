@@ -23,9 +23,9 @@ def DataPreProcessing(stock_name) -> np.ndarray:
     return arr
 
 # build the environment with gym
-class GymEnvironment(gym.Env):
+class StockEnv(gym.Env):
     def __init__(self, data) -> None:
-        super(GymEnvironment, self).__init__()
+        super(StockEnv, self).__init__()
         self.data = data
         # time
         self.terminal_date = self.data.shape[0]
@@ -102,10 +102,9 @@ class GymEnvironment(gym.Env):
         print(f"step: {self.current_date}")
         print(f"capital: {self.capital}")
 
-
 if __name__ == '__main__':
     data = DataPreProcessing('TSM')
-    env = GymEnvironment(data)
+    env = StockEnv(data)
     env.reset()
     while not env.done():
         env.render()
