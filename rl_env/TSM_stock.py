@@ -1,6 +1,7 @@
+# file_dir =  r'venv/Lib/site-packages/gym/envs/classic_control/TSM_stock'
 # import packages
 import numpy as np
-import pandas as pd      
+import pandas as pd
 import pandas_datareader as datareader
 import matplotlib.pyplot as plt
 
@@ -8,7 +9,6 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
 # pip install gym
-# gym_register_dir = r'venv/Lib/site-packages/gym/envs/classic_control/TSM_stock'
 import gym
 from gym import spaces
 
@@ -32,7 +32,7 @@ class StockEnv(gym.Env):
         self.terminal_date = self.data.shape[0]
         self.current_date = 0
         self.window_size = 5
-        self.timestep = 5
+        self.timestep = 100
         # stock
         self.initial_capital = 10000
         self.capital = 0
@@ -42,7 +42,7 @@ class StockEnv(gym.Env):
         self.action_space = spaces.Discrete(3)
         self.observation_space = spaces.Box(low=0, high=100000, shape=(1, 6), dtype=np.float32)
 
-    def next_observation(self) -> np.ndarray:
+    def NextObservation(self) -> np.ndarray:
         starting_id = self.current_date - self.window_size
         weight = np.arange(1, self.window_size+1)
         windowed_data = self.data[starting_id:self.current_date, :] if starting_id >= 0 \
@@ -68,7 +68,7 @@ class StockEnv(gym.Env):
             self.capital += selling_price
             self.inventory.pop()
     
-    def take_action(self, action) -> None:
+    def TakeAction(self, action) -> None:
         if action == 1:
             self.Buy()
         elif action == 2:
@@ -76,7 +76,7 @@ class StockEnv(gym.Env):
         else:
             pass
 
-    def done(self) -> bool:
+    def CheckTerminal(self) -> bool:
         if self.current_date >= self.terminal_date:
             return True
     
@@ -88,15 +88,16 @@ class StockEnv(gym.Env):
         self.current_date = 5
         self.capital = self.initial_capital
         self.last_capital = self.capital
-        state = self.next_observation()
+        self.inventory = []
+        state = self.NextObservation()
         return state
 
     def step(self, action) -> np.ndarray:
-        self.take_action(action)
+        self.TakeAction(action)
         self.current_date = min(self.current_date + self.timestep, self.terminal_date)
-        done = self.done()
+        done = self.CheckTerminal()
         reward = self.Reward(done)
-        new_state = self.next_observation()
+        new_state = self.NextObservation()
         return new_state, reward, done, {}
 
     def render(self, mode='human') -> None:
