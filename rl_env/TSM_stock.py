@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
 # pip install gym
+# gym_register_dir = r'venv/Lib/site-packages/gym/envs/classic_control/TSM_stock'
 import gym
 from gym import spaces
 
